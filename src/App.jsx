@@ -1,3 +1,4 @@
+import Footer from './components/Footer';
 import Navbar from './components/Navbar';
 import HeroSection from './pages/HeroSection';
 import ProductListingPage from './pages/ProductListingPage';
@@ -10,6 +11,7 @@ export default function App() {
         <HeroSection />
         <ProductListingPage />
       </main>
+      <Footer />
     </>
   );
 }
