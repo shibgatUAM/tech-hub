@@ -1,4 +1,25 @@
+import { useEffect, useState } from 'react';
+import { useProductContext } from '../context';
+
 export default function Search() {
+  const { searchQuery, setSearchQuery } = useProductContext();
+
+  const [localInput, setLocalInput] = useState(searchQuery);
+
+  // debounce logic
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      setSearchQuery(localInput);
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [localInput, setSearchQuery]);
+
+  // local input reset
+  useEffect(() => {
+    setLocalInput(searchQuery);
+  }, [searchQuery]);
+
   return (
     <div className="hidden sm:block">
       <div className="flex items-center gap-2 px-3 py-2 rounded-full border border-slate-200 bg-white shadow-sm">
@@ -17,6 +38,8 @@ export default function Search() {
           type="text"
           placeholder="Search laptops, GPUs, desktops..."
           className="bg-transparent text-sm placeholder:text-slate-400 focus:outline-none w-64"
+          value={localInput}
+          onChange={(e) => setLocalInput(e.target.value)}
         />
       </div>
     </div>
