@@ -1,7 +1,7 @@
 export default function SortBy() {
   return (
     <div className="flex items-center gap-2">
-      <label for="sort" className="text-sm font-medium text-slate-700">
+      <label htmlFor="sort" className="text-sm font-medium text-slate-700">
         Sort by:
       </label>
       <select

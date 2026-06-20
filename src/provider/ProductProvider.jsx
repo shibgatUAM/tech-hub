@@ -11,12 +11,14 @@ export default function ProductProvider({ children }) {
   const [sortOption, setSortOption] = useState('Newest');
 
   const filteredProducts = useMemo(() => {
-    let result = [...products];
+    let result = Array.isArray(products) ? [...products] : [];
+
+    if (result.length === 0) return [];
 
     // filter as per searchQuery
     if (searchQuery.trim() !== '') {
       result = result.filter((product) =>
-        product.title.toLowerCase().includes(searchQuery.toLowerCase()),
+        product.title?.toLowerCase().includes(searchQuery.toLowerCase()),
       );
     }
 
@@ -42,6 +44,8 @@ export default function ProductProvider({ children }) {
   }, [products, searchQuery, selectedCategory, sortOption]);
 
   const categories = useMemo(() => {
+    if (!Array.isArray(products) || products.length === 0) return ['All'];
+
     const allCategories = products.map((p) => p.category);
     return ['All', ...new Set(allCategories)];
   }, [products]);
