@@ -1,13 +1,23 @@
 import { useProductContext } from '../context';
 
 export default function ProductFilter() {
-  const { categories, selectedCategory, setSelectedCategory, setSearchQuery } =
-    useProductContext();
+  const {
+    categories,
+    selectedCategory,
+    setSelectedCategory,
+    setSearchQuery,
+    selectedPriceRange,
+    setSelectedPriceRange,
+    selectedRating,
+    setSelectedRating,
+  } = useProductContext();
 
   // filter reset function
   const handleClearFilters = () => {
     setSelectedCategory('All');
     setSearchQuery('');
+    setSelectedPriceRange('All');
+    setSelectedRating(0);
   };
 
   return (
@@ -54,31 +64,31 @@ export default function ProductFilter() {
             Price Range
           </h4>
           <div className="space-y-2">
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                name="price"
-                className="w-4 h-4 text-rose-500"
-              />
-              <span className="ml-3 text-sm text-slate-700">$0 - $2000</span>
-            </label>
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                name="price"
-                className="w-4 h-4 text-rose-500"
-              />
-              <span className="ml-3 text-sm text-slate-700">$2000 - $5000</span>
-            </label>
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                name="price"
-                checked
-                className="w-4 h-4 text-rose-500"
-              />
-              <span className="ml-3 text-sm text-slate-700">$5000+</span>
-            </label>
+            {[
+              { id: '0-2000', label: '$0 - $2000' },
+              { id: '2000-5000', label: '$2000 - $5000' },
+              { id: '5000+', label: '$5000+' },
+            ].map((range) => (
+              <label
+                key={range.id}
+                className="flex items-center cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  name="price"
+                  checked={selectedPriceRange === range.id}
+                  onChange={() => {
+                    setSelectedPriceRange(
+                      selectedPriceRange === range.id ? 'All' : range.id,
+                    );
+                  }}
+                  className="w-4 h-4 text-rose-500"
+                />
+                <span className="ml-3 text-sm text-slate-700">
+                  {range.label}
+                </span>
+              </label>
+            ))}
           </div>
         </div>
 
@@ -86,28 +96,21 @@ export default function ProductFilter() {
         <div>
           <h4 className="font-medium text-sm mb-3 text-slate-700">Rating</h4>
           <div className="space-y-2">
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked
-                className="w-4 h-4 text-rose-500 rounded border-slate-300"
-              />
-              <span className="ml-3 text-sm text-slate-700">4.5 ⭐ & up</span>
-            </label>
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                className="w-4 h-4 text-rose-500 rounded border-slate-300"
-              />
-              <span className="ml-3 text-sm text-slate-700">4.0 ⭐ & up</span>
-            </label>
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                className="w-4 h-4 text-rose-500 rounded border-slate-300"
-              />
-              <span className="ml-3 text-sm text-slate-700">3.5 ⭐ & up</span>
-            </label>
+            {[4.5, 4.0, 3.5].map((rate) => (
+              <label key={rate} className="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={selectedRating === rate}
+                  onChange={() => {
+                    setSelectedRating(selectedRating === rate ? 0 : rate);
+                  }}
+                  className="w-4 h-4 text-rose-500 rounded border-slate-300"
+                />
+                <span className="ml-3 text-sm text-slate-700">
+                  {rate} ⭐ & up
+                </span>
+              </label>
+            ))}
           </div>
         </div>
       </div>

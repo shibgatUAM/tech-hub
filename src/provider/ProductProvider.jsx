@@ -11,6 +11,9 @@ export default function ProductProvider({ children }) {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortOption, setSortOption] = useState('Newest');
 
+  const [selectedPriceRange, setSelectedPriceRange] = useState('All');
+  const [selectedRating, setSelectedRating] = useState(0);
+
   const filteredProducts = useMemo(() => {
     let result = Array.isArray(products) ? [...products] : [];
 
@@ -41,8 +44,29 @@ export default function ProductProvider({ children }) {
       result.sort((a, b) => a.id - b.id);
     }
 
+    // price filter
+    if (selectedPriceRange === '0-2000') {
+      result = result.filter((p) => p.price <= 2000);
+    } else if (selectedPriceRange === '2000-5000') {
+      result = result.filter((p) => p.price > 2000 && p.price <= 5000);
+    } else if (selectedPriceRange === '5000+') {
+      result = result.filter((p) => p.price > 5000);
+    }
+
+    // rating filter
+    if (selectedRating > 0) {
+      result = result.filter((p) => p.rating_rate >= selectedRating);
+    }
+
     return result;
-  }, [products, searchQuery, selectedCategory, sortOption]);
+  }, [
+    products,
+    searchQuery,
+    selectedCategory,
+    sortOption,
+    selectedPriceRange,
+    selectedRating,
+  ]);
 
   const categories = useMemo(() => {
     if (!Array.isArray(products) || products.length === 0) return ['All'];
@@ -63,6 +87,10 @@ export default function ProductProvider({ children }) {
     setSelectedCategory,
     sortOption,
     setSortOption,
+    selectedPriceRange,
+    setSelectedPriceRange,
+    selectedRating,
+    setSelectedRating,
   };
 
   return <ProductContext value={value}>{children}</ProductContext>;
