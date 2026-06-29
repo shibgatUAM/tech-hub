@@ -6,6 +6,7 @@ export default function ProductProvider({ children }) {
   const { products, loading, error } = useProduct();
 
   // local state for search, filter & sorting
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortOption, setSortOption] = useState('Newest');

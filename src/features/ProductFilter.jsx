@@ -1,38 +1,50 @@
+import { useProductContext } from '../context';
+
 export default function ProductFilter() {
+  const { categories, selectedCategory, setSelectedCategory, setSearchQuery } =
+    useProductContext();
+
+  // filter reset function
+  const handleClearFilters = () => {
+    setSelectedCategory('All');
+    setSearchQuery('');
+  };
+
   return (
     <div className="md:col-span-1 space-y-4">
       <div className="soft-card p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-slate-900">Filters</h3>
-          <button className="text-xs text-rose-500 font-semibold">Clear</button>
+          <button
+            onClick={handleClearFilters}
+            className="text-xs text-rose-500 font-semibold hover:text-rose-600 transition-colors cursor-pointer"
+          >
+            Clear
+          </button>
         </div>
 
         {/* Category */}
         <div className="mb-6">
           <h4 className="font-medium text-sm mb-3 text-slate-700">Category</h4>
           <div className="space-y-2">
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked
-                className="w-4 h-4 text-rose-500 rounded border-slate-300"
-              />
-              <span className="ml-3 text-sm text-slate-700">Apple Mac Pro</span>
-            </label>
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                className="w-4 h-4 text-rose-500 rounded border-slate-300"
-              />
-              <span className="ml-3 text-sm text-slate-700">Gaming Laptop</span>
-            </label>
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                className="w-4 h-4 text-rose-500 rounded border-slate-300"
-              />
-              <span className="ml-3 text-sm text-slate-700">Workstation</span>
-            </label>
+            {categories.map((category) => (
+              <label
+                key={category}
+                className="flex items-center cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedCategory === category}
+                  onChange={() => {
+                    setSelectedCategory(
+                      selectedCategory === category ? 'All' : category,
+                    );
+                  }}
+                  className="w-4 h-4 text-rose-500 rounded border-slate-300"
+                />
+                <span className="ml-3 text-sm text-slate-700">{category}</span>
+              </label>
+            ))}
           </div>
         </div>
 
